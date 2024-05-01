@@ -1,10 +1,6 @@
-import time
-import os
 import speech_recognition as sr
-from pydub import AudioSegment
-# from playsound import playsound
 
-file_name = 'https://example.com/audio_file.wav'
+# file_name = 'https://example.com/audio_file.wav'
 
 def speech_recognition(audio_file_path):
     try:
@@ -15,16 +11,19 @@ def speech_recognition(audio_file_path):
         # print('[사용자] '+ text)
         return recognized_text
     except sr.UnknownValueError:
-        print('인식 실패') 
+        # print('인식 실패') 
+        return "인식 실패"
     except sr.RequestError as e:
-        print('요청 실패 : {0}'.format(e)) #API key Error
+        # print('요청 실패 : {0}'.format(e)) #API key Error
+        return f'요청 실패: {e}'
 
-def answer(text):
-    recognizer = sr.Recognizer()
-    audio_file = sr.AudioFile(file_name)
-    # playsound(file_name)
-    with audio_file as source:
-        audio = recognizer.record(source)
+# 대답하는거는 나중에 추가하면 될 듯
+# def answer(text):
+#     recognizer = sr.Recognizer()
+#     audio_file = sr.AudioFile(file_name)
+#     # playsound(file_name)
+#     with audio_file as source:
+#         audio = recognizer.record(source)
 
 if __name__ == '__main__':
     print(speech_recognition("test.wav"))
