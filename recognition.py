@@ -6,9 +6,11 @@ from pydub import AudioSegment
 
 file_name = 'https://example.com/audio_file.wav'
 
-def speech_recognition(audio_file):
+def speech_recognition(audio_file_path):
     try:
         recognizer = sr.Recognizer()
+        with sr.WavFile(audio_file_path) as source:
+            audio_file = recognizer.record(source)
         recognized_text = recognizer.recognize_google(audio_file, language='ko-KR')
         # print('[사용자] '+ text)
         return recognized_text
@@ -25,8 +27,4 @@ def answer(text):
         audio = recognizer.record(source)
 
 if __name__ == '__main__':
-    r = sr.Recognizer()
-    # listen(recognizer, audio)
-    with sr.WavFile("recorded2.wav") as source:
-        audio_file = r.record(source)
-    print(speech_recognition(audio_file))
+    print(speech_recognition("test.wav"))
