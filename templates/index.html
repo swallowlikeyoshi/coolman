@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>음성 녹음</title>
+</head>
+
+<body>
+    <h1>음성 녹음</h1>
+    <button id="recordButton">녹음 시작</button>
+    <button id="stopButton" disabled>녹음 중지</button>
+    <div id="audioContainer"></div>
+
+    <script>
+        let audioChunks = [];
+        let mediaRecorder;
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                mediaRecorder = new MediaRecorder(stream);
+
+                mediaRecorder.ondataavailable = function (event) {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = function () {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    const audio = new Audio(audioUrl);
+                    document.getElementById('audioContainer').appendChild(audio);
+
+                    const formData = new FormData();
+                    formData.append('audio', audioBlob, 'recorded_audio.wav');
+
+                    fetch('/upload-audio', {
+                        method: 'POST',
+                        body: formData
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                console.log('음성 파일 업로드 성공');
+                            } else {
+                                console.error('음성 파일 업로드 실패');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('음성 파일 업로드 중 오류 발생:', error);
+                        });
+
+                };
+            })
+            .catch(function (err) {
+                console.log('음성 녹음 권한이 없습니다: ', err);
+            });
+
+        document.getElementById('recordButton').addEventListener('click', function () {
+            audioChunks = [];
+            mediaRecorder.start();
+            document.getElementById('recordButton').disabled = true;
+            document.getElementById('stopButton').disabled = false;
+        });
+
+        document.getElementById('stopButton').addEventListener('click', function () {
+            mediaRecorder.stop();
+            document.getElementById('recordButton').disabled = false;
+            document.getElementById('stopButton').disabled = true;
+        });
+    </script>
+</body>
+
+</html>
