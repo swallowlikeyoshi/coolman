@@ -33,7 +33,7 @@
                     audioChunks.push(event.data);
                 };
 
-                mediaRecorder.onstop = function () {
+                mediaRecorder.onstop = async function () {
                     const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     const audio = new Audio(audioUrl);
@@ -42,23 +42,40 @@
                     const formData = new FormData();
                     formData.append('audio', audioBlob, 'recorded_audio.wav');
 
-                    fetch('/recognize_audio', {
-                        method: 'POST',
-                        body: formData
-                    })
-                        .then(response => {
-                            if (response.ok) {
-                                response.text()
-                                        .then((result) => {
-                                            console.log(result);
-                                            setResult(result);
-                                        });
-                            } else {
-                                console.error('음성 파일 업로드 실패');
-                            }
+                    // fetch('/recognize_audio', {
+                    //     method: 'POST',
+                    //     body: formData
+                    // })
+                    //     .then(response => {
+                    //         if (response.ok) {
+                    //             response.text()
+                    //                 .then((result) => {
+                    //                     console.log(result);
+                    //                     setResult(result);
+                    //                 });
+                    //         } else {
+                    //             console.error('음성 파일 업로드 실패');
+                    //         }
+                    //     })
+                    //     .catch(error => {
+                    //         console.error('음성 파일 업로드 중 오류 발생:', error);
+                    //     })
+
+                    fetch('/recognize_audio', { method: 'POST', body: formData })
+                        .then(async (result) => {
+                            recognized_text = await result.text();
+                            console.log(recognized_text);
+                            setResult(recognized_text);
+
+                            // 이후에 /answer 엔드포인트로 요청 보내기
+                            return httpRequest('/answer', 'GET', {}, { scripts: recognized_text });
                         })
-                        .catch(error => {
-                            console.error('음성 파일 업로드 중 오류 발생:', error);
+                        .then((answerResult) => {
+                            console.log(answerResult);
+                            setAnswer(answerResult);
+                        })
+                        .catch((error) => {
+                            console.error('오류 발생:', error);
                         });
 
                 };
@@ -87,6 +104,47 @@
         function setAnswer(answer) {
             document.getElementById('answerd_text').innerHTML = answer;
         }
+
+        function httpRequest(url, method, header, params) {
+            let options = {
+                method: method,
+                headers: header || {},  // Ensure headers is defined
+            };
+
+            // Append query parameters for GET requests
+            if (method.toUpperCase() === 'GET' && params) {
+                const queryString = Object.keys(params)
+                    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
+                    .join('&');
+                url += `?${queryString}`;
+            } else if (params) {
+                // For other methods (e.g., POST), include params in the request body
+                options = {
+                    method: method,
+                    body: JSON.stringify(params),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            }
+
+            return new Promise((resolve, reject) => {
+                fetch(url, options)
+                    .then(response => {
+                        if (!response.ok) {
+                            reject(new Error(`HTTP error! Status: ${response.status}`));
+                        }
+                        return response.text();  // or response.json() if the response is JSON
+                    })
+                    .then(data => {
+                        resolve(data);
+                    })
+                    .catch(error => {
+                        reject(error);
+                    });
+            });
+        }
+
     </script>
 </body>
 
