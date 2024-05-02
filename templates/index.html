@@ -68,11 +68,12 @@
                             setResult(recognized_text);
 
                             // 이후에 /answer 엔드포인트로 요청 보내기
-                            return httpRequest('/answer', 'GET', {}, { scripts: recognized_text });
+                            return fetch('/answer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scripts: recognized_text })})
                         })
-                        .then((answerResult) => {
-                            console.log(answerResult);
-                            setAnswer(answerResult);
+                        .then(async (answerResult) => {
+                            answered_text = await answerResult.text();
+                            console.log(answered_text);
+                            setAnswer(answered_text);
                         })
                         .catch((error) => {
                             console.error('오류 발생:', error);

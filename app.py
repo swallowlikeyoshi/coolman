@@ -32,10 +32,10 @@ def recognize_audio():
 
     return recognized_text, 200
 
-@app.route('/answer', methods=['GET'])
+@app.route('/answer', methods=['POST'])
 def answer():
-    problem = request.args.get('scripts')
-    return gpt.ask(problem)
+    data = request.get_json()  # 클라이언트로부터 JSON 데이터 받기
+    return gpt.ask(data['scripts'])
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0", port=80)
