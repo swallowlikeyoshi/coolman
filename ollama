@@ -1,0 +1,3 @@
+curl -X POST http://ollamaunyang.kro.kr/answer \
+     -H "Content-Type: application/json" \
+     -d '{"question": 파일명이 뭐지?}'
