@@ -2,7 +2,7 @@ import speech_recognition as sr
 
 # file_name = 'https://example.com/audio_file.wav'
 
-def speech_recognition(audio_file_path):
+def text_recognition(audio_file_path):
     try:
         recognizer = sr.Recognizer()
         with sr.WavFile(audio_file_path) as source:
@@ -26,4 +26,4 @@ def speech_recognition(audio_file_path):
 #         audio = recognizer.record(source)
 
 if __name__ == '__main__':
-    print(speech_recognition("test.wav"))
+    print(text_recognition("test.wav"))
