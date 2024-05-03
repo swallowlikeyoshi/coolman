@@ -90,6 +90,7 @@
             mediaRecorder.start();
             document.getElementById('recordButton').disabled = true;
             document.getElementById('stopButton').disabled = false;
+            setAnswer('')
         });
 
         document.getElementById('stopButton').addEventListener('click', function () {
