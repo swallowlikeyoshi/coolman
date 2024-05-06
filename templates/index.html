@@ -34,13 +34,13 @@
                 };
 
                 mediaRecorder.onstop = async function () {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/aac' });
                     const audioUrl = URL.createObjectURL(audioBlob);
                     const audio = new Audio(audioUrl);
                     document.getElementById('audioContainer').appendChild(audio);
 
                     const formData = new FormData();
-                    formData.append('audio', audioBlob, 'recorded_audio.wav');
+                    formData.append('audio', audioBlob, 'recorded_audio.mp3');
 
                     // fetch('/recognize_audio', {
                     //     method: 'POST',
@@ -90,6 +90,7 @@
             mediaRecorder.start();
             document.getElementById('recordButton').disabled = true;
             document.getElementById('stopButton').disabled = false;
+            setResult('')
             setAnswer('')
         });
 

@@ -24,6 +24,8 @@ def text_recognition(audio_file_path):
 #     # playsound(file_name)
 #     with audio_file as source:
 #         audio = recognizer.record(source)
+import os
 
 if __name__ == '__main__':
-    print(text_recognition("test.wav"))
+    # print(text_recognition("test.wav"))
+    print(os.getcwd())

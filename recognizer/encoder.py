@@ -1,18 +1,17 @@
-from pydub import AudioSegment
+import ffmpeg
 import os
 
-# 압축된 WAV 파일 경로
-compressed_wav_path = 'compressed_audio.wav'
-
-# 무손실 WAV 파일 경로
-lossless_wav_path = 'lossless_audio.wav'
-
-def covert_loseless(audio_file_path):
-    audio = AudioSegment.from_file(audio_file_path)
-    lossless_audio = audio.set_sample_width(sample_width=2)
-    lossless_wav_path = os.path.join("uploads", 'lossless_audio.wav')
-    lossless_audio.export(lossless_wav_path, format="wav")
-    return lossless_wav_path
+def convert_aac_to_wav(input_file, output_file, ffmpeg_path):
+    (
+        ffmpeg
+        .input(input_file)
+        .output(output_file, acodec='pcm_s16le', format='wav')
+        .run(cmd=ffmpeg_path, overwrite_output=True)
+    )
+    return output_file
 
 if __name__ == "__main__":
-    print(covert_loseless("test.wav"))
+    input_file_path = "input.aac"
+    output_file_path = "output.wav"
+    convert_aac_to_wav(input_file_path, output_file_path)
+    print("Conversion complete!")
