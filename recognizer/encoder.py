@@ -1,12 +1,12 @@
 import ffmpeg
 import os
 
-def convert_aac_to_wav(input_file, output_file, ffmpeg_path):
+def convert_aac_to_wav(input_file, output_file):
     (
         ffmpeg
         .input(input_file)
         .output(output_file, acodec='pcm_s16le', format='wav')
-        .run(cmd=ffmpeg_path, overwrite_output=True)
+        .run(overwrite_output=True)
     )
     return output_file
 

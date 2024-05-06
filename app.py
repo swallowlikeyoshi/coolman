@@ -29,7 +29,8 @@ def recognize_audio():
 
     # 여기서 음성 파일을 처리하고 텍스트로 변환하는 코드 추가
     RESULT_PATH = os.path.join(DIR_PATH, 'uploads', 'result.wav')
-    converted_audio_path = encoder.convert_aac_to_wav(audio_path, RESULT_PATH, FFMPEG_PATH)
+    # converted_audio_path = encoder.convert_aac_to_wav(audio_path, RESULT_PATH, FFMPEG_PATH) # 리눅스에서는 불필요함
+    converted_audio_path = encoder.convert_aac_to_wav(audio_path, RESULT_PATH)
     recognized_text = recognition.text_recognition(converted_audio_path)
 
     return recognized_text, 200
