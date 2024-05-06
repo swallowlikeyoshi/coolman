@@ -1,12 +1,16 @@
 import requests
 import json
 
-URL = 'http://ollamaunyang.kro.kr/api/generate'
+URL = 'https://ollamaunyang.kro.kr/api/generate'
 
 def ask(problem):
+    # prompt = {
+    #     'model': 'llama3',
+    #     'prompt': "내가 한국어로 질문을 줄게, 앞으로는 한국어로만 말하고 한국어로 대답하면 돼. 이제 다음 질문에 답해줘: " + problem,
+    # }
     prompt = {
-        'model': 'llama3',
-        'prompt': "내가 한국어로 질문을 줄게, 앞으로는 한국어로만 말하고 한국어로 대답하면 돼. 이제 다음 질문에 답해줘: " + problem,
+        'model': 'mistral',
+        'prompt': problem,
     }
     response = _get_post_response(URL, prompt)
     answer = _process_text(response.text)

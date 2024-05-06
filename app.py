@@ -27,6 +27,7 @@ def recognize_audio():
     audio_file.save(audio_path)
 
     # 여기서 음성 파일을 처리하고 텍스트로 변환하는 코드 추가
+    print(audio_path)
     audio_path = encoder.covert_loseless(audio_path)
     recognized_text = recognition.text_recognition(audio_path)
 
