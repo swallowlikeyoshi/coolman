@@ -42,33 +42,14 @@
                     const formData = new FormData();
                     formData.append('audio', audioBlob, 'recorded_audio.mp3');
 
-                    // fetch('/recognize_audio', {
-                    //     method: 'POST',
-                    //     body: formData
-                    // })
-                    //     .then(response => {
-                    //         if (response.ok) {
-                    //             response.text()
-                    //                 .then((result) => {
-                    //                     console.log(result);
-                    //                     setResult(result);
-                    //                 });
-                    //         } else {
-                    //             console.error('음성 파일 업로드 실패');
-                    //         }
-                    //     })
-                    //     .catch(error => {
-                    //         console.error('음성 파일 업로드 중 오류 발생:', error);
-                    //     })
-
-                    fetch('/recognize_audio', { method: 'POST', body: formData })
+                    fetch('/audio/recognize_audio', { method: 'POST', body: formData })
                         .then(async (result) => {
                             recognized_text = await result.text();
                             console.log(recognized_text);
                             setResult(recognized_text);
 
                             // 이후에 /answer 엔드포인트로 요청 보내기
-                            return fetch('/answer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scripts: recognized_text })})
+                            return fetch('/audio/answer', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ scripts: recognized_text })})
                         })
                         .then(async (answerResult) => {
                             answered_text = await answerResult.text();

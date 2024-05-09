@@ -17,15 +17,5 @@ def text_recognition(audio_file_path):
         # print('요청 실패 : {0}'.format(e)) #API key Error
         return f'요청 실패: {e}'
 
-# 대답하는거는 나중에 추가하면 될 듯
-# def answer(text):
-#     recognizer = sr.Recognizer()
-#     audio_file = sr.AudioFile(file_name)
-#     # playsound(file_name)
-#     with audio_file as source:
-#         audio = recognizer.record(source)
-import os
-
 if __name__ == '__main__':
-    # print(text_recognition("test.wav"))
-    print(os.getcwd())
+    print(text_recognition("test.wav"))

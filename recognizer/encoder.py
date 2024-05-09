@@ -1,13 +1,23 @@
 import ffmpeg
-import os
+import sys
 
-def convert_aac_to_wav(input_file, output_file):
-    (
-        ffmpeg
-        .input(input_file)
-        .output(output_file, acodec='pcm_s16le', format='wav')
-        .run(overwrite_output=True)
-    )
+PLATFORM = sys.platform
+
+def convert_aac_to_wav(input_file, output_file, ffmpeg_path = ''):
+    if PLATFORM == 'win32':
+        (
+            ffmpeg
+            .input(input_file)
+            .output(output_file, acodec='pcm_s16le', format='wav')
+            .run(cmd=ffmpeg_path, overwrite_output=True)
+        )
+    else:
+        (
+            ffmpeg
+            .input(input_file)
+            .output(output_file, acodec='pcm_s16le', format='wav')
+            .run(overwrite_output=True)
+        )
     return output_file
 
 if __name__ == "__main__":
