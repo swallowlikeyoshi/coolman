@@ -1,8 +1,12 @@
 from flask import Flask, request, render_template
 from route import audio
+from route import gpt
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.register_blueprint(audio.Audio)
+app.register_blueprint(gpt.LLM)
 
 @app.route('/', methods=['GET'])
 def index():

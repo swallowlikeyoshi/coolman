@@ -26,11 +26,12 @@ def recognize_audio():
         return '음성 파일이 선택되지 않았습니다.', 400
     
     count = len(os.listdir(RECORD_PATH))    
-    audio_path = os.path.join(RECORD_PATH, f'({count}) {audio_file.filename}')
+    file_name = f'({count}) {audio_file.filename}'
+    audio_path = os.path.join(RECORD_PATH, file_name)
     audio_file.save(audio_path)
 
     # 여기서 음성 파일을 처리하고 텍스트로 변환하는 코드 추가
-    RESULT_PATH = os.path.join(ROOT_PATH, 'files', 'lossless_audio')
+    RESULT_PATH = os.path.join(ROOT_PATH, 'files', 'lossless_audio', file_name)
     if PLATFORM == 'win32':
         converted_audio_path = encoder.convert_aac_to_wav(audio_path, RESULT_PATH, FFMPEG_PATH) # 리눅스에서는 불필요함
     else:
