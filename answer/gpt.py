@@ -1,7 +1,7 @@
 import requests
 import json
 
-URL = 'https://ollamaunyang.kro.kr/api/generate'
+URL = 'http://localhost:11434/api/generate'
 model_name = 'llama3'
 last_context = []
 
